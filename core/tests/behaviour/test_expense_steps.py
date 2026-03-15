@@ -55,6 +55,7 @@ def check_expenses_length(context, expenses):
     total = len(context["db"]._expenses)
     assert expenses == total
 
+
 @given("un gestor con gastos repartidos entre enero y febrero")
 def manager_with_expenses_in_two_months(context):
     context["service"].create_expense(
