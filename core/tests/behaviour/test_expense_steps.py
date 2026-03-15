@@ -54,3 +54,29 @@ def check_month_total(context, month_name, expected_total):
 def check_expenses_length(context, expenses):
     total = len(context["db"]._expenses)
     assert expenses == total
+
+@given("un gestor con gastos repartidos entre enero y febrero")
+def manager_with_expenses_in_two_months(context):
+    context["service"].create_expense(
+        title="Libros",
+        amount=15,
+        description="Material de clase",
+        expense_date=date(2025, 1, 10),
+    )
+    context["service"].create_expense(
+        title="Fotocopias",
+        amount=10,
+        description="Apuntes",
+        expense_date=date(2025, 1, 20),
+    )
+    context["service"].create_expense(
+        title="Autobús",
+        amount=7,
+        description="Transporte",
+        expense_date=date(2025, 2, 3),
+    )
+
+
+@when("calculo el total por mes")
+def calculate_total_by_month(context):
+    context["totals"] = context["service"].total_by_month()
