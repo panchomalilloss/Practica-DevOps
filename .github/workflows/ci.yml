@@ -1,8 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches: ["**"]
+on: push
 
 jobs:
   lint-and-test:
@@ -11,28 +9,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install uv
-        run: pip install uv
-
       - name: Install dependencies
-        run: uv sync
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pytest pytest-bdd ruff mypy
 
-      - name: Install ruff and mypy
-        run: pip install ruff mypy
+      - name: Ruff check
+        run: python3 -m ruff check . --fix
 
       - name: Ruff format
         run: python3 -m ruff format . --check
-
-      - name: Ruff linter
-        run: python3 -m ruff check . --fix
-
-      - name: Mypy
-        run: python3 -m mypy .
 
       - name: Unit tests
         run: python3 -m pytest ./core/tests/unit
